@@ -1,0 +1,29 @@
+using System.Collections;
+using Field;
+using UnityEngine;
+
+namespace Unit
+{
+    public class UnitSpawner : MonoBehaviour {
+        [SerializeField] GridMovementAgent m_MovementAgent;
+        [SerializeField] GridHolder m_GridHolder;
+
+        private void Awake() {
+            StartCoroutine(SpawnUnitsCoroutine());
+        }
+
+        private IEnumerator SpawnUnitsCoroutine() {
+            while(true) {
+                yield return new WaitForSeconds(1f);
+                SpawnUnit();
+            }
+        }
+
+        private void SpawnUnit() {
+            Node startNode = m_GridHolder.Grid.GetNode(m_GridHolder.StartCoordinate);
+            Vector3 position = startNode.Position;
+            GridMovementAgent movementAgent = Instantiate(m_MovementAgent, position, Quaternion.identity, null);
+            movementAgent.SetStartNode(startNode);
+        }
+    }
+}
