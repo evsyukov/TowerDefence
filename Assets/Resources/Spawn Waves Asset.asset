@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: b237e87f0ee957c4aaef71ce7a0ca5bc, type: 3}
   m_Name: Spawn Waves Asset
   m_EditorClassIdentifier: Assembly-CSharp:Assets:SpawnWavesAsset
-  EnemyAsset: {fileID: 11400000, guid: b8308f1e42f7177428a6c3df0a3cc0e1, type: 2}
-  Count: 10
-  TimeBetweenSpawns: 2
+  SpawnWaves:
+  - EnemyAsset: {fileID: 11400000, guid: b8308f1e42f7177428a6c3df0a3cc0e1, type: 2}
+    Count: 5
+    TimeBetweenSpawns: 1
+    TimeBeforeStartWave: 1

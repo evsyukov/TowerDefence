@@ -18,7 +18,7 @@ namespace Field
         public Vector2Int StartCoordinate => m_StartCoordinate;
         public Grid Grid => m_Grid;
 
-        private void Start() {
+        public void CreateGrid() {
             m_Camera = Camera.main;
 
             float width = m_GridWidth * m_NodeSize;
@@ -26,7 +26,13 @@ namespace Field
             transform.localScale = new Vector3(width * 0.1f, 1f, height * 0.1f);
             m_Offset = transform.position - (new Vector3(width, 0f, height) * 0.5f);
 
-            m_Grid = new Grid(m_GridWidth, m_GridHeight, m_Offset, m_NodeSize, m_TargetCoordinate);
+            m_Grid = new Grid(m_GridWidth,
+                            m_GridHeight,
+                            m_Offset,
+                            m_NodeSize,
+                            m_StartCoordinate,
+                            m_TargetCoordinate
+            );
         }
 
         private void OnValidate() {
@@ -36,7 +42,7 @@ namespace Field
             m_Offset = transform.position - (new Vector3(width, 0f, height) * 0.5f);
         }
 
-        private void Update() {
+        public void RaycastInGrid() {
             if(m_Grid == null || m_Camera == null) {
                 return;
             }
@@ -45,6 +51,7 @@ namespace Field
             Ray ray = m_Camera.ScreenPointToRay(mousePosition);
             if(Physics.Raycast(ray, out RaycastHit hit)) {
                 if (hit.transform != transform) {
+                    m_Grid.UnselectNode();
                     return;
                 }
                 Vector3 hitPosition = hit.point;
@@ -53,12 +60,9 @@ namespace Field
                 int x = (int)(difference.x / m_NodeSize);
                 int y = (int)(difference.z / m_NodeSize);
 
-                // Debug.Log("Hit: " + x + ", " + y);
-                if(Input.GetMouseButtonDown(0)) {
-                    Node node = m_Grid.GetNode(x, y);
-                    node.IsOccupied = !node.IsOccupied;
-                    m_Grid.UpdatePathfinding();
-                }
+                m_Grid.SelectCoordinate(new Vector2Int(x, y));
+            } else {
+                m_Grid.UnselectNode();
             }
         }
 
